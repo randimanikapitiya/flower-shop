@@ -1,0 +1,20 @@
+flower-shop
+├── assets
+│   ├── css
+│   │   └── style.css
+│   └── bootstrap
+├── includes
+│   ├── header.php
+│   ├── footer.php
+│   ├── nav.php
+│   └── db.php
+├── pages
+│   ├── about.php
+│   ├── contact.php
+│   ├── login.php
+│   ├── products.php
+│   └── register.php
+├── config
+│   └── config.php
+├── index.php
+└── README.md
