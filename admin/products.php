@@ -22,9 +22,9 @@ include 'includes/admin_nav.php';
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Products Management</h1>
-                <button class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <a href="add-product.php" class="btn btn-primary-custom" data-bs-toggle="modal" data-bs-target="#addProductModal">
                     <i class="fas fa-plus me-2"></i>Add New Product
-                </button>
+                </a>
             </div>
 
             <!-- Products Table -->

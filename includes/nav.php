@@ -23,8 +23,16 @@
                 </li>
             </ul>
             <div class="d-flex">
-                <a class="btn btn-outline-primary me-2" href="/flower-shop/pages/login.php">Login</a>
+                
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <span class="navbar-text me-3">
+                        Hello, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>
+                    </span>
+                    <a href="../handlers/logout.php" class="btn btn-primary">Logout</a>
+<?php else: ?>
+    <a class="btn btn-outline-primary me-2" href="/flower-shop/pages/login.php">Login</a>
                 <a class="btn btn-primary" href="/flower-shop/pages/register.php">Register</a>
+<?php endif; ?>
             </div>
         </div>
     </div>

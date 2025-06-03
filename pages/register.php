@@ -3,6 +3,10 @@ include '../includes/header.php';
 include '../includes/nav.php';
 ?>
 
+<?php
+include '../config/db.php';
+?>
+
 <div class="auth-wrapper">
     <div class="container">
         <div class="row justify-content-center my-5">
@@ -12,7 +16,7 @@ include '../includes/nav.php';
                         <h2 class="mb-0"><i class="fas fa-user-plus me-2"></i>Create Account</h2>
                     </div>
                     <div class="card-body p-5">
-                        <form action="register_process.php" method="POST" class="needs-validation" novalidate>
+                        <form action="../handlers/register_process.php" method="POST" class="needs-validation" novalidate>
                             <div class="row">
                                 <div class="col-md-6 mb-4">
                                     <label for="firstname" class="form-label">First Name</label>

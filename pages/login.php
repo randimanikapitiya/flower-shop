@@ -12,7 +12,7 @@ include '../includes/nav.php';
                         <h2 class="mb-0"><i class="fas fa-user-circle me-2"></i>Login</h2>
                     </div>
                     <div class="card-body p-5">
-                        <form action="login_process.php" method="POST" class="needs-validation" novalidate>
+                        <form action="../handlers/login_process.php" method="POST" class="needs-validation" novalidate>
                             <div class="mb-4">
                                 <label for="email" class="form-label">Email Address</label>
                                 <div class="input-group">

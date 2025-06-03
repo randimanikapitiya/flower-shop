@@ -1,13 +1,25 @@
 <?php
-include 'includes/header.php';
-include 'includes/nav.php';
-?>    <div class="hero-banner" style="background: linear-gradient(rgba(172, 23, 84, 0.7), rgba(229, 56, 136, 0.7)), url('assets/images/banner/hero-banner.jpg') center/cover;">
+session_start();
+include '../includes/header.php';
+include '../includes/nav.php';
+?>
+ 
+  <div class="hero-banner" style="background: linear-gradient(rgba(172, 23, 84, 0.7), rgba(229, 56, 136, 0.7)), url('assets/images/banner/hero-banner.jpg') center/cover;">
     <div class="hero-content">
         <h1 class="display-4 fw-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Welcome to Our Flower Shop</h1>
         <p class="lead text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Your one-stop shop for beautiful flower bouquets and arrangements</p>
-        <a href="pages/products.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(5px);">
+        <!-- <a href="pages/products.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(5px);">
+            <i class="fas fa-seedling me-2"></i>Explore Our Collection
+        </a> -->
+        <?php if (isset($_SESSION['user_id'])): ?>
+    <a href="pages/products.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(5px);">
             <i class="fas fa-seedling me-2"></i>Explore Our Collection
         </a>
+<?php else: ?>
+    <a href="pages/register.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(5px);">
+            <i class="fas fa-seedling me-2"></i>Explore Our Collection
+        </a>
+<?php endif; ?>
     </div>
 </div>
 
@@ -18,10 +30,12 @@ include 'includes/nav.php';
                 <div class="banner-content text-center p-5">
                     <h2 class="text-white mb-3">Spring Collection</h2>
                     <p class="text-white mb-4">Discover our fresh seasonal arrangements</p>
-                    <?php if(isset($_SESSION['user_id'])): ?>
-                        <a href="pages/products.php" class="btn btn-outline-light">Shop Now</a>
-                    
-                    <?php endif; ?>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+    <a href="pages/products.php" class="btn btn-primary">Order Now</a>
+<?php else: ?>
+    <a href="pages/register.php" class="btn btn-primary">Order Now</a>
+<?php endif; ?>
+
 
                     
                 </div>
@@ -32,7 +46,12 @@ include 'includes/nav.php';
                 <div class="banner-content text-center p-5">
                     <h2 class="text-white mb-3">Wedding Flowers</h2>
                     <p class="text-white mb-4">Make your special day unforgettable</p>
-                    <a href="pages/contact.php" class="btn btn-outline-light">Contact Us</a>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+    <a href="pages/products.php" class="btn btn-primary">Order Now</a>
+<?php else: ?>
+    <a href="pages/register.php" class="btn btn-primary">Order Now</a>
+<?php endif; ?>
+
                 </div>
             </div>
         </div>
@@ -49,8 +68,14 @@ include 'includes/nav.php';
                     <h5 class="card-title">Romantic Red Roses</h5>
                     <p class="card-text">A classic arrangement of premium red roses.</p>
                     <div class="price mb-3">$49.99</div>
-                    <a href="pages/products.php" class="btn btn-outline-primary">View Details</a>
-                    <a href="pages/register.php" class="btn btn-primary">Order Now</a>
+                    <!-- <a href="pages/products.php" class="btn btn-outline-primary">View Details</a>
+                    <a href="pages/register.php" class="btn btn-primary">Order Now</a> -->
+                    <?php if (isset($_SESSION['user_id'])): ?>
+    <a href="pages/products.php" class="btn btn-primary">Order Now</a>
+<?php else: ?>
+    <a href="pages/register.php" class="btn btn-primary">Order Now</a>
+<?php endif; ?>
+
                 </div>
             </div>
         </div>
@@ -61,8 +86,14 @@ include 'includes/nav.php';
                     <h5 class="card-title">Spring Symphony</h5>
                     <p class="card-text">A vibrant mix of seasonal spring flowers.</p>
                     <div class="price mb-3">$39.99</div>
-                    <a href="pages/products.php" class="btn btn-outline-primary">View Details</a>
-                    <a href="pages/register.php" class="btn btn-primary">Order Now</a>
+                    <!-- <a href="pages/products.php" class="btn btn-outline-primary">View Details</a>
+                    <a href="pages/register.php" class="btn btn-primary">Order Now</a> -->
+                    <?php if (isset($_SESSION['user_id'])): ?>
+    <a href="pages/products.php" class="btn btn-primary">Order Now</a>
+<?php else: ?>
+    <a href="pages/register.php" class="btn btn-primary">Order Now</a>
+<?php endif; ?>
+
                 </div>
             </div>
         </div>
@@ -115,5 +146,5 @@ include 'includes/nav.php';
 </div>
 
 <?php
-include 'includes/footer.php';
+include '../includes/footer.php';
 ?>
