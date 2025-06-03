@@ -16,10 +16,10 @@ include '../includes/nav.php';
 <div class="container py-5">
     <div class="row">
         <div class="col-md-7 mb-4">
-            <div class="card shadow-sm">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body p-4">
                     <h3 class="card-title mb-4" style="color: var(--primary);">Send us a Message</h3>
-                    <form action="contact.php" method="post" class="needs-validation" novalidate>
+                    <form action="../handlers/add_to_massage.php" method="post" class="needs-validation" novalidate>
                         <div class="mb-3">
                             <label for="name" class="form-label">Full Name</label>
                             <input type="text" class="form-control" id="name" name="name" required>
@@ -55,7 +55,7 @@ include '../includes/nav.php';
         </div>
 
         <div class="col-md-5">
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow p-3 mb-5 bg-white rounded mb-4">
                 <div class="card-body p-4">
                     <h3 class="card-title mb-4" style="color: var(--primary);">Contact Information</h3>
                     <div class="d-flex mb-3">
@@ -89,19 +89,17 @@ include '../includes/nav.php';
                 </div>
             </div>
 
-            <div class="card shadow-sm">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
                 <div class="card-body p-4">
                     <h3 class="card-title mb-4" style="color: var(--primary);">Quick Links</h3>
                     <div class="d-grid gap-2">
                         <a href="register.php" class="btn btn-outline-primary" style="color: var(--primary); border-color: var(--primary);">
                             <i class="fas fa-user-plus me-2"></i>Create an Account
                         </a>
-                        <a href="products.php" class="btn btn-outline-primary" style="color: var(--primary); border-color: var(--primary);">
+                        <a href="categories.php" class="btn btn-outline-primary" style="color: var(--primary); border-color: var(--primary);">
                             <i class="fas fa-shopping-cart me-2"></i>View Our Products
                         </a>
-                        <a href="#" class="btn btn-outline-primary" style="color: var(--primary); border-color: var(--primary);">
-                            <i class="fas fa-heart me-2"></i>Special Offers
-                        </a>
+                        
                     </div>
                 </div>
             </div>

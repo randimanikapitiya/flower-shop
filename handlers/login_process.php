@@ -36,10 +36,10 @@ if ($result->num_rows === 1) {
         }
         exit;
     } else {
-        echo "Invalid password.";
+        echo "<script>alert('Invalid password.'); window.location.href='../pages/login.php';</script>";
     }
 } else {
-    echo "No user found with this email.";
+    echo "<script>alert('No user found with this email.'); window.location.href='../pages/login.php';</script>";
 }
 
 $stmt->close();

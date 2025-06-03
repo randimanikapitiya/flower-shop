@@ -1,15 +1,35 @@
 <?php
 session_start();
+include '../includes/header.php';
+include '../includes/nav.php';
 include '../config/db.php';
 
-
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
-    header('Location: ../pages/login.php');
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+if ($_SESSION['user_role'] !== 'admin') {
+    header('Location: ../pages/403.php');
     exit();
 }
 
-include 'includes/admin_header.php';
-include 'includes/admin_nav.php';
+// Fetch order data
+$sql = "SELECT 
+            o.id AS order_id,
+            u.firstname AS customer_name,
+            p.name AS product_name,
+            p.main_image,
+            p.sale_price,
+            o.product_id,
+            o.status,
+            o.created_at,
+            o.delivery_date
+        FROM orders o
+        JOIN users u ON o.user_id = u.id
+        JOIN products p ON o.product_id = p.id
+        ORDER BY o.created_at DESC";
+
+$result = $conn->query($sql);
 ?>
 
 <div class="container-fluid">
@@ -30,37 +50,6 @@ include 'includes/admin_nav.php';
                             <i class="fas fa-print me-2"></i>Print
                         </button>
                     </div>
-                    <button type="button" class="btn btn-sm btn-primary-custom">
-                        <i class="fas fa-calendar me-2"></i>This week
-                    </button>
-                </div>
-            </div>
-
-            <!-- Order Filters -->
-            <div class="row g-3 mb-4">
-                <div class="col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option value="">All Statuses</option>
-                        <option value="pending">Pending</option>
-                        <option value="processing">Processing</option>
-                        <option value="shipped">Shipped</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <select class="form-select">
-                        <option value="">All Payment Status</option>
-                        <option value="paid">Paid</option>
-                        <option value="pending">Pending</option>
-                        <option value="failed">Failed</option>
-                    </select>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <input type="date" class="form-control" placeholder="Start Date">
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <input type="date" class="form-control" placeholder="End Date">
                 </div>
             </div>
 
@@ -69,132 +58,77 @@ include 'includes/admin_nav.php';
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Products</th>
-                                    <th>Total</th>
-                                    <th>Payment Status</th>
-                                    <th>Order Status</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#1234</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="../assets/images/products/roses.jpg" alt="Product" class="rounded-circle me-2" width="32">
-                                            John Doe
-                                        </div>
-                                    </td>
-                                    <td>Red Roses Bouquet x 1</td>
-                                    <td>$49.99</td>
-                                    <td><span class="badge bg-success">Paid</span></td>
-                                    <td><span class="badge bg-info">Shipped</span></td>
-                                    <td>2025-06-03</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#viewOrderModal">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-success">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Products</th>
+                <th>Price</th>
+                <th>Order Status</th>
+                <th>Ordered Date</th>
+                <th>Delivery Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result && $result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['order_id']); ?></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="../assets/images/products/<?php echo htmlspecialchars($row['main_image']); ?>" alt="Product" class="rounded-circle me-2" width="32">
+                                <?php echo htmlspecialchars($row['customer_name']); ?>
+                            </div>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['product_name']); ?></td>
+                        <td>LKR <?php echo number_format($row['sale_price'] , 2); ?></td>
+                        <td>
+                            <span class="badge bg-<?php echo ($row['status'] === 'paid') ? 'success' : 'secondary'; ?>">
+                                <?php echo ucfirst($row['status']); ?>
+                            </span>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                        <td><?php echo htmlspecialchars($row['delivery_date']); ?></td>
+                        <td>
+                            <div class="btn-group">
+                                <form method="post" action="view_order.php" style="display:inline;">
+                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </form>
+                                <form method="post" action="mark_delivered.php" style="display:inline;">
+                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </form>
+                                <form method="post" action="cancel_order.php" style="display:inline;">
+                                    <input type="hidden" name="order_id" value="<?php echo $row['order_id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="8" class="text-center">No orders found.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
                     </div>
                 </div>
             </div>
-
-            <!-- Pagination -->
-            <nav class="d-flex justify-content-end mt-3">
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                    </li>
-                </ul>
-            </nav>
         </main>
     </div>
 </div>
 
-<!-- View Order Modal -->
-<div class="modal fade" id="viewOrderModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Order Details #1234</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Customer Information</h6>
-                        <p><strong>Name:</strong> John Doe</p>
-                        <p><strong>Email:</strong> john@example.com</p>
-                        <p><strong>Phone:</strong> (123) 456-7890</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Shipping Address</h6>
-                        <p>123 Main St<br>Apt 4B<br>New York, NY 10001</p>
-                    </div>
-                </div>
-                <hr>
-                <h6>Order Items</h6>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Red Roses Bouquet</td>
-                            <td>$49.99</td>
-                            <td>1</td>
-                            <td>$49.99</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Subtotal:</strong></td>
-                            <td>$49.99</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Shipping:</strong></td>
-                            <td>$5.00</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                            <td>$54.99</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary-custom">Update Status</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 
 <?php include 'includes/admin_footer.php'; ?>

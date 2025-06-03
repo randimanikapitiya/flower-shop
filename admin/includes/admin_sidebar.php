@@ -39,22 +39,6 @@
             </li>
         </ul>
 
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Settings</span>
-        </h6>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link" href="profile.php">
-                    <i class="fas fa-user me-2"></i>
-                    Profile
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="settings.php">
-                    <i class="fas fa-cog me-2"></i>
-                    Settings
-                </a>
-            </li>
-        </ul>
+        
     </div>
 </div>

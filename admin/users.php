@@ -10,6 +10,27 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 
 include 'includes/admin_header.php';
 include 'includes/admin_nav.php';
+
+$sql = "SELECT * FROM users ORDER BY created_at DESC";
+$result = $conn->query($sql);
+if (!$result) {
+    die("Database query failed: " . $conn->error);
+}   
+
+// Total users
+$total_query = "SELECT COUNT(*) AS total FROM users";
+$total_result = $conn->query($total_query);
+$total_users = $total_result->fetch_assoc()['total'];
+
+// New users this month
+$current_month = date('Y-m-01'); // First day of current month
+$new_query = "SELECT COUNT(*) AS new_this_month FROM users WHERE created_at >= ?";
+$stmt = $conn->prepare($new_query);
+$stmt->bind_param("s", $current_month);
+$stmt->execute();
+$new_result = $stmt->get_result();
+$new_users = $new_result->fetch_assoc()['new_this_month'];
+
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -25,145 +46,111 @@ include 'includes/admin_nav.php';
                 </button>
             </div>
 
-            <!-- User Stats -->
             <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-primary-custom rounded-circle p-3">
-                                    <i class="fas fa-users fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Total Users</h6>
-                                    <h2 class="mt-2 mb-0">250</h2>
-                                </div>
-                            </div>
-                        </div>
+    <div class="col-md-3">
+        <div class="card card-stats shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-primary-custom rounded-circle p-3">
+                        <i class="fas fa-users fa-fw text-white"></i>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-success rounded-circle p-3">
-                                    <i class="fas fa-user-check fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Active Users</h6>
-                                    <h2 class="mt-2 mb-0">220</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-warning rounded-circle p-3">
-                                    <i class="fas fa-user-clock fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">New This Month</h6>
-                                    <h2 class="mt-2 mb-0">25</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-danger rounded-circle p-3">
-                                    <i class="fas fa-user-lock fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Inactive Users</h6>
-                                    <h2 class="mt-2 mb-0">30</h2>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-0">Total Users</h6>
+                        <h2 class="mt-2 mb-0"><?php echo $total_users; ?></h2>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card card-stats shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-warning rounded-circle p-3">
+                        <i class="fas fa-user-clock fa-fw text-white"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-0">New This Month</h6>
+                        <h2 class="mt-2 mb-0"><?php echo $new_users; ?></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <!-- Users Table -->
             <div class="card shadow-sm">
                 <div class="card-header py-3 bg-light">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-md-3">
-                            <select class="form-select">
-                                <option value="">All Roles</option>
-                                <option value="admin">Admin</option>
-                                <option value="customer">Customer</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select class="form-select">
-                                <option value="">All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search users...">
-                                <button class="btn btn-primary-custom" type="button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <h6 class="m-0 font-weight-bold text-primary-custom">
+                        <i class="fas fa-users me-2"></i>Users List
+                    </h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Joined Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0">
-                                                <div class="rounded-circle bg-primary-custom text-white p-2" style="width: 35px; height: 35px; text-align: center;">
-                                                    JD
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 ms-3">
-                                                <h6 class="mb-0">John Doe</h6>
-                                                <small class="text-muted">Customer</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>john@example.com</td>
-                                    <td><span class="badge bg-info">Customer</span></td>
-                                    <td><span class="badge bg-success">Active</span></td>
-                                    <td>2025-05-01</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result && $result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['id']); ?></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-0"><?php echo htmlspecialchars($row['firstname']); ?></h6>
+                                    <small class="text-muted"><?php echo ucfirst($row['role']); ?></small>
+                                </div>
+                            </div>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['email']); ?></td>
+                        <td>
+                            <form method="post" action="./includes/change_role.php" style="display:inline;">
+                                <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                                <select name="role" class="form-select form-select-sm d-inline w-auto" onchange="this.form.submit()" <?php echo ($row['id'] == $_SESSION['user_id']) ? 'disabled' : ''; ?>>
+                                    <option value="admin" <?php echo ($row['role'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
+                                    <option value="user" <?php echo ($row['role'] === 'user') ? 'selected' : ''; ?>>User</option>
+                                </select>
+                            </form>
+                        </td>
+                       
+                        <td><?php echo htmlspecialchars(date('Y-m-d', strtotime($row['created_at']))); ?></td>
+                        <td>
+                            <div class="btn-group">
+                                <form method="post" action="edit_user.php" style="display:inline;">
+                                    <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-primary-custom">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </form>
+                                <form method="post" action="delete_user.php" onsubmit="return confirm('Are you sure?');" style="display:inline;">
+                                    <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7" class="text-center">No users found.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
                     </div>
                 </div>
             </div>

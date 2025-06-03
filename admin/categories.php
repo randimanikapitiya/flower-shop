@@ -17,6 +17,21 @@ $result = mysqli_query($conn, $query);
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
 }
+
+// Get total categories
+$total_sql = "SELECT COUNT(*) AS total FROM categories";
+$total_result = $conn->query($total_sql);
+$total_categories = $total_result->fetch_assoc()['total'];
+
+// Get active categories
+$active_sql = "SELECT COUNT(*) AS active FROM categories WHERE status = 'active'";
+$active_result = $conn->query($active_sql);
+$active_categories = $active_result->fetch_assoc()['active'];
+
+// Get inactive categories
+$inactive_sql = "SELECT COUNT(*) AS inactive FROM categories WHERE status = 'inactive'";
+$inactive_result = $conn->query($inactive_sql);
+$inactive_categories = $inactive_result->fetch_assoc()['inactive'];
 ?>
 
 <div class="container-fluid">
@@ -35,67 +50,55 @@ if (!$result) {
 
             <!-- Category Stats -->
             <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-primary-custom rounded-circle p-3">
-                                    <i class="fas fa-folder fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Total Categories</h6>
-                                    <h2 class="mt-2 mb-0">12</h2>
-                                </div>
-                            </div>
-                        </div>
+    <div class="col-md-3">
+        <div class="card card-stats shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-primary-custom rounded-circle p-3">
+                        <i class="fas fa-folder fa-fw text-white"></i>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-success rounded-circle p-3">
-                                    <i class="fas fa-check-circle fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Active</h6>
-                                    <h2 class="mt-2 mb-0">10</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-warning rounded-circle p-3">
-                                    <i class="fas fa-pause-circle fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Inactive</h6>
-                                    <h2 class="mt-2 mb-0">2</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card card-stats shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 bg-info rounded-circle p-3">
-                                    <i class="fas fa-layer-group fa-fw text-white"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6 class="card-title mb-0">Sub Categories</h6>
-                                    <h2 class="mt-2 mb-0">5</h2>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-0">Total Categories</h6>
+                        <h2 class="mt-2 mb-0"><?php echo $total_categories; ?></h2>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-stats shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-success rounded-circle p-3">
+                        <i class="fas fa-check-circle fa-fw text-white"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-0">Active</h6>
+                        <h2 class="mt-2 mb-0"><?php echo $active_categories; ?></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-stats shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-warning rounded-circle p-3">
+                        <i class="fas fa-pause-circle fa-fw text-white"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-0">Inactive</h6>
+                        <h2 class="mt-2 mb-0"><?php echo $inactive_categories; ?></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <!-- Categories Table -->
             <div class="card shadow-sm">

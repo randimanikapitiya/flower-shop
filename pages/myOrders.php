@@ -22,8 +22,10 @@ $result = $stmt->get_result();
 ?>
 
 <div class="container">
+    <a href="categories.php" class="btn m-2 btn-outline-primary">Back to The Shopping</a>
     <h1 class="text-center my-5">My Orders</h1>
     <div class="row">
+        
         <div class="col-md-10 offset-md-1">
             <?php if ($result && $result->num_rows > 0): ?>
                 <table class="table table-striped">
