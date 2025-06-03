@@ -1,6 +1,9 @@
 <?php
+session_start();
 include '../includes/header.php';
 include '../includes/nav.php';
+
+        include '../config/db.php';
 ?>
 
 <div class="contact-banner" style="background: linear-gradient(rgba(172, 23, 84, 0.7), rgba(229, 56, 136, 0.7)), url('../assets/images/banner/parallax-banner.jpg') center/cover; padding: 60px 0; margin-bottom: 40px;">

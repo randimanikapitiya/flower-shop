@@ -1,6 +1,9 @@
 <?php
+session_start();
 include '../includes/header.php';
 include '../includes/nav.php';
+
+        include '../config/db.php';
 ?>
 
 <div class="container py-5">

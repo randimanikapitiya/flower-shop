@@ -30,7 +30,8 @@
                     <span class="navbar-text me-3">
                         Hello, <?php echo htmlspecialchars($_SESSION['user_name'] ?? 'User'); ?>
                     </span>
-                    <a href="../handlers/logout.php" class="btn btn-primary">Logout</a>
+                    <a href="../handlers/logout.php" class="btn mx-1 btn-primary">Logout</a>
+                    <a href="myOrders.php" class="btn ml-5 btn-outline-primary">My Orders</a>
 <?php else: ?>
     <a class="btn btn-outline-primary me-2" href="/flower-shop/pages/login.php">Login</a>
                 <a class="btn btn-primary" href="/flower-shop/pages/register.php">Register</a>

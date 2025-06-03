@@ -28,7 +28,7 @@ $result = $stmt->get_result();
                             <p class="mb-1"><strong>Stock:</strong> <?php echo (int)$row['stock']; ?></p>
                             <p class="mb-3"><strong>Status:</strong> <?php echo htmlspecialchars($row['status']); ?></p>
                             <div class="d-grid gap-2">
-                                <a href="add-to-cart.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">Order Now</a>
+                                <a href="./add-to-order.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">Order Now</a>
                             </div>
                         </div>
                     </div>

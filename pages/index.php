@@ -12,16 +12,16 @@ include '../includes/nav.php';
         
 ?>
 
-<div class="hero-banner" style="background: linear-gradient(rgba(172, 23, 84, 0.7), rgba(229, 56, 136, 0.7)), url('assets/images/banner/hero-banner.jpg') center/cover;">
+<div class="hero-banner" style="background: linear-gradient(rgba(172, 23, 84, 0.3), rgba(229, 56, 136, 0.3)), url('../assets/images/banner/hero-banner.jpg') center/cover;">
     <div class="hero-content">
         <h1 class="display-4 fw-bold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Welcome to Our Flower Shop</h1>
         <p class="lead text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Your one-stop shop for beautiful flower bouquets and arrangements</p>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="./products.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(5px);">
+            <a href="./products.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(1px);">
                 <i class="fas fa-seedling me-2"></i>Explore Our Collection
             </a>
         <?php else: ?>
-            <a href="./register.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(5px);">
+            <a href="./register.php" class="btn btn-light btn-lg" style="background: rgba(255,255,255,0.95); color: var(--primary); backdrop-filter: blur(1px);">
                 <i class="fas fa-seedling me-2"></i>Explore Our Collection
             </a>
         <?php endif; ?>
@@ -31,7 +31,7 @@ include '../includes/nav.php';
 <div class="container-fluid px-0">
     <div class="row g-0">
         <div class="col-md-6">
-            <div class="banner-image-left" style="background: url('assets/images/banner/spring-collection.jpg') center/cover;">
+            <div class="banner-image-left" style="background: url('../assets/images/banner/spring-collection.jpg') center/cover;">
                 <div class="banner-content text-center p-5">
                     <h2 class="text-white mb-3">Spring Collection</h2>
                     <p class="text-white mb-4">Discover our fresh seasonal arrangements</p>
@@ -44,7 +44,7 @@ include '../includes/nav.php';
             </div>
         </div>
         <div class="col-md-6">
-            <div class="banner-image-right" style="background: url('assets/images/banner/wedding-flowers.jpg') center/cover;">
+            <div class="banner-image-right" style="background: url('../assets/images/banner/wedding-flowers.jpg') center/cover;">
                 <div class="banner-content text-center p-5">
                     <h2 class="text-white mb-3">Wedding Flowers</h2>
                     <p class="text-white mb-4">Make your special day unforgettable</p>
