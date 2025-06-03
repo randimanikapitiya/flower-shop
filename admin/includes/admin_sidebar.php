@@ -2,7 +2,7 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="admin-dashboard.php">
                     <i class="fas fa-tachometer-alt me-2"></i>
                     Dashboard
                 </a>

@@ -1,3 +1,5 @@
+
+
 <!-- filepath: flower-shop/includes/nav.php -->
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: var(--secondary);">
     <div class="container">
@@ -10,16 +12,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/flower-shop/index.php">Home</a>
+                    <a class="nav-link" href="../pages/index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/flower-shop/pages/products.php">Products</a>
+                    <a class="nav-link" href="../pages/categories.php">Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/flower-shop/pages/about.php">About</a>
+                    <a class="nav-link" href="../pages/about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/flower-shop/pages/contact.php">Contact Us</a>
+                    <a class="nav-link" href="../pages/contact.php">Contact Us</a>
                 </li>
             </ul>
             <div class="d-flex">

@@ -52,7 +52,7 @@
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item text-danger" href="../pages/logout.php">
+                            <a class="dropdown-item text-danger" href="../handlers/logout.php">
                                 <i class="fas fa-sign-out-alt me-2"></i>
                                 Logout
                             </a>

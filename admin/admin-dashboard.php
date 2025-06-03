@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once '../config/config.php';
-require_once '../includes/db.php';
+include '../config/db.php';
+
 
 // Check if user is logged in and is admin
-// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-//     header('Location: ../pages/login.php');
-//     exit();
-// }
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+    header('Location: ../pages/login.php');
+    exit();
+}
 
 include 'includes/admin_header.php';
 include 'includes/admin_nav.php';

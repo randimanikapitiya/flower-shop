@@ -1,5 +1,5 @@
 <?php
 session_start();
 session_destroy();
-header("Location: ../pages/home.php?logout=success");
+header("Location: ../pages/index.php?logout=success");
 exit;

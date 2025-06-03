@@ -1,7 +1,12 @@
 <?php
 session_start();
-require_once '../config/config.php';
-require_once '../includes/db.php';
+include '../config/db.php';
+
+
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+    header('Location: ../pages/login.php');
+    exit();
+}
 
 include 'includes/admin_header.php';
 include 'includes/admin_nav.php';
@@ -26,7 +31,7 @@ include 'includes/admin_nav.php';
                     <!-- Add Product Form -->
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <form action="api/products.php" method="POST" enctype="multipart/form-data">
+                            <form action="api/add_products.php" method="POST" enctype="multipart/form-data">
                                 <!-- Basic Information -->
                                 <div class="card mb-4">
                                     <div class="card-header py-3">
@@ -43,12 +48,25 @@ include 'includes/admin_nav.php';
                                         <div class="row mb-4">
                                             <div class="col-md-6">
                                                 <label for="productCategory" class="form-label">Category</label>
+                                                <?php
+                                                    // Fetch categories from the database
+                                                    $category_query = "SELECT id, name FROM categories";
+                                                    $category_result = mysqli_query($conn, $category_query);
+                                                ?>
                                                 <select class="form-select" id="productCategory" name="category" required>
-                                                    <option value="">Select Category</option>
-                                                    <option value="roses">Roses</option>
-                                                    <option value="lilies">Lilies</option>
-                                                    <option value="mixed">Mixed Bouquets</option>
-                                                    <option value="seasonal">Seasonal Flowers</option>
+                                                    <option value="" disabled selected>Select category</option>
+                                                    <?php if ($category_result && mysqli_num_rows($category_result) > 0): ?>
+                                                        <?php while ($row = mysqli_fetch_assoc($category_result)): ?>
+                                                            <option value="<?php echo htmlspecialchars($row['id']); ?>">
+                                                                <?php echo htmlspecialchars($row['name']); ?>
+                                                            </option>
+                                                        <?php endwhile; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>No categories found</option>
+                                                    <?php endif; ?>
+                                                    
+
+                                                    
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
@@ -77,13 +95,9 @@ include 'includes/admin_nav.php';
                                     </div>
                                     <div class="card-body">
                                         <div class="row mb-4">
+                                            
                                             <div class="col-md-6">
-                                                <label for="productPrice" class="form-label">Regular Price ($)</label>
-                                                <input type="number" class="form-control" id="productPrice" 
-                                                       name="price" step="0.01" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="productSalePrice" class="form-label">Sale Price ($)</label>
+                                                <label for="productSalePrice" class="form-label"> Price (LKR)</label>
                                                 <input type="number" class="form-control" id="productSalePrice" 
                                                        name="sale_price" step="0.01">
                                             </div>
@@ -95,11 +109,7 @@ include 'includes/admin_nav.php';
                                                 <input type="number" class="form-control" id="productStock" 
                                                        name="stock" required>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label for="productSKU" class="form-label">SKU</label>
-                                                <input type="text" class="form-control" id="productSKU" 
-                                                       name="sku" placeholder="Enter SKU">
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -117,43 +127,24 @@ include 'includes/admin_nav.php';
                                             <small class="text-muted">Recommended size: 800x800 pixels</small>
                                         </div>
 
-                                        <div class="mb-4">
-                                            <label for="productGallery" class="form-label">Additional Images</label>
-                                            <input type="file" class="form-control" id="productGallery" 
-                                                   name="gallery[]" accept="image/*" multiple>
-                                            <small class="text-muted">You can select multiple images</small>
-                                        </div>
+                                          <!-- Preview Card -->
+                    <div class="card shadow-sm">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary-custom">
+                                <i class="fas fa-eye me-2"></i>Category Preview
+                            </h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="preview-image mb-3">
+                                <img src="../assets/images/products/placeholder.jpg" class="img-fluid rounded" alt="Category Preview">
+                            </div>
+                            <h5 class="preview-name mb-2">Category Name</h5>
+                            <p class="preview-description text-muted small mb-0">Category description will appear here</p>
+                        </div>
+                    </div>
                                     </div>
                                 </div>
-
-                                <!-- Additional Information -->
-                                <div class="card mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary-custom">Additional Information</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-4">
-                                            <label class="form-label d-block">Product Options</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="featuredProduct" 
-                                                       name="is_featured" value="1">
-                                                <label class="form-check-label" for="featuredProduct">Featured Product</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="checkbox" id="newArrival" 
-                                                       name="is_new" value="1">
-                                                <label class="form-check-label" for="newArrival">New Arrival</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <label for="productTags" class="form-label">Product Tags</label>
-                                            <input type="text" class="form-control" id="productTags" name="tags" 
-                                                   placeholder="Enter tags separated by commas">
-                                        </div>
-                                    </div>
-                                </div>
-
+                                
                                 <div class="border-top pt-4 mt-4">
                                     <div class="row">
                                         <div class="col-md-6">

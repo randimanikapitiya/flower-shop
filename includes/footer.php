@@ -5,10 +5,10 @@
             <div class="col-md-4">
                 <h5>Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="/flower-shop/index.php">Home</a></li>
-                    <li><a href="/flower-shop/pages/about.php">About</a></li>
-                    <li><a href="/flower-shop/pages/contact.php">Contact Us</a></li>
-                    <li><a href="/flower-shop/pages/products.php">Products</a></li>
+                    <li><a href="../pages/index.php">Home</a></li>
+                    <li><a href="../pages/about.php">About</a></li>
+                    <li><a href="../pages/contact.php">Contact Us</a></li>
+                    <li><a href="../pages/products.php">Products</a></li>
                 </ul>
             </div>
             <div class="col-md-4">

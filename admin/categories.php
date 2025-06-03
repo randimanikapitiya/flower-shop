@@ -1,19 +1,32 @@
 <?php
 session_start();
-require_once '../config/config.php';
-require_once '../includes/db.php';
+include '../config/db.php';
+
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
+    header('Location: ../pages/login.php');
+    exit();
+}
 
 include 'includes/admin_header.php';
 include 'includes/admin_nav.php';
+
+// Fetch all categories
+$query = "SELECT * FROM categories ORDER BY name ASC";
+$result = mysqli_query($conn, $query);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($conn));
+}
 ?>
 
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <?php include 'includes/admin_sidebar.php'; ?>
+        <?php include './includes/admin_sidebar.php'; ?>
 
         <!-- Main Content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Categories Management</h1>
                 <a href="add-categories.php" class="btn btn-primary-custom">
                     <i class="fas fa-plus me-2"></i>Add New Category
@@ -93,28 +106,46 @@ include 'includes/admin_nav.php';
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Products Count</th>
+                                    <th>Images</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Roses</td>
-                                    <td>Beautiful rose arrangements</td>
-                                    <td><span class="badge bg-info">15</span></td>
-                                    <td><span class="badge bg-success">Active</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                <?php if (mysqli_num_rows($result) > 0): ?>
+                                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                                        <tr>
+                                            <td><?= $row['id'] ?></td>
+                                            <td><?= htmlspecialchars($row['name']) ?></td>
+                                            <td>
+                                                <?php if (!empty($row['image'])): ?>
+                                                    <img src="../assets/images/categories/<?= htmlspecialchars($row['image']) ?>" alt="Category Image" width="60"  class="img-thumbnail">
+                                                <?php else: ?>
+                                                    <span class="text-muted">No image</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($row['status'] === 'active'): ?>
+                                                    <span class="badge bg-success">Active</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary-custom" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No categories found.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -123,45 +154,3 @@ include 'includes/admin_nav.php';
         </main>
     </div>
 </div>
-
-<!-- Edit Category Modal -->
-<div class="modal fade" id="editCategoryModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Category</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="api/categories.php" method="POST">
-                <div class="modal-body">
-                    <input type="hidden" name="category_id" value="1">
-                    <div class="mb-3">
-                        <label for="editCategoryName" class="form-label">Category Name</label>
-                        <input type="text" class="form-control" id="editCategoryName" name="name" value="Roses" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editCategorySlug" class="form-label">Category Slug</label>
-                        <input type="text" class="form-control" id="editCategorySlug" name="slug" value="roses" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editCategoryDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="editCategoryDescription" name="description" rows="3">Beautiful rose arrangements</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editCategoryStatus" class="form-label">Status</label>
-                        <select class="form-select" id="editCategoryStatus" name="status" required>
-                            <option value="active" selected>Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary-custom">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<?php include 'includes/admin_footer.php'; ?>
