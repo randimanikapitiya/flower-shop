@@ -22,12 +22,12 @@
             <div class="col-md-4">
                 <h5>Contact Info</h5>
                 <p><i class="fas fa-phone"></i> (123) 456-7890</p>
-                <p><i class="fas fa-envelope"></i> info@flowershop.com</p>
+                <p><i class="fas fa-envelope"></i> info@bloomingbeauty.com</p>
             </div>
         </div>
         <hr>
         <div class="text-center">
-            <p class="mb-0">&copy; <?php echo date("Y"); ?> Flower Shop. All rights reserved.</p>
+            <p class="mb-0">&copy; <?php echo date("Y"); ?> Blooming Beauty. All rights reserved.</p>
         </div>
     </div>
 </footer>
